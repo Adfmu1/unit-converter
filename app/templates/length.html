@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method="post">
+	<p>
+		<label for="value">Value</label><br>
+		<input
+			type="text"
+			id="value"
+			name="value"
+			inputmode="decimal"
+			pattern="[1-9]+(\.[0-9]+)?"
+			maxlength="20"
+			title="Enter a number"
+			value="{{ value }}"
+			required
+		>
+	</p>
+	<p>
+		<label for="from_unit">From</label>
+		<select id="from_unit" name="from_unit">
+			{% for unit in units %}
+			<option value="{{ unit }}"{% if unit == from_unit %} selected{% endif %}>{{ unit }}</option>
+			{% endfor %}
+		</select>
+
+		<label for="to_unit">To</label>
+		<select id="to_unit" name="to_unit">
+			{% for unit in units %}
+			<option value="{{ unit }}"{% if unit == to_unit %} selected{% endif %}>{{ unit }}</option>
+			{% endfor %}
+		</select>
+	</p>
+
+	<button type="submit">Convert</button>
+</form>
+
+{% if result %}
+<h2>{{ result }}</h2>
+{% endif %}
+{% endblock %}
