@@ -1,7 +1,5 @@
-from crypt import methods
-from multiprocessing import Value
-
 from flask import render_template, request
+
 from app import app
 
 LENGTH_UNITS = {
@@ -74,8 +72,8 @@ def weight():
 
     if request.method == 'POST':
         value = request.form.get('value', '').strip()
-        from_unit = request.form.get('from_unit', 'g')
-        to_unit = request.form.get('to_unit', 'kg')
+        from_unit = request.form.get('from_unit', 'kg')
+        to_unit = request.form.get('to_unit', 'g')
 
         try:
             if not value or len(value) > 20:
