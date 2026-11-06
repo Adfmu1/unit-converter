@@ -50,6 +50,7 @@ def index():
 @app.route('/length', methods=['GET', 'POST'])
 def length():
     result = None
+    error = None
     value = ''
     from_unit = 'm'
     to_unit = 'cm'
@@ -68,15 +69,19 @@ def length():
             if from_unit not in LENGTH_UNITS or to_unit not in LENGTH_UNITS:
                 raise ValueError
         except ValueError:
-            result = 'Please enter a valid number.'
+            error = 'Please enter a valid number.'
         else:
-            converted = amount * LENGTH_UNITS[from_unit] / LENGTH_UNITS[to_unit]
-            result = f'{amount:.10g} {from_unit} = {converted:.10g} {to_unit}'
+            if amount < 0:
+                error = 'Please enter a non-negative number.'
+            else:
+                converted = amount * LENGTH_UNITS[from_unit] / LENGTH_UNITS[to_unit]
+                result = f'{amount:.10g} {from_unit} = {converted:.10g} {to_unit}'
 
     return render_template(
         'length.html',
         unit_of='length',
         result=result,
+        error=error,
         value=value,
         from_unit=from_unit,
         to_unit=to_unit,
@@ -86,6 +91,7 @@ def length():
 @app.route('/weight', methods=['GET', 'POST'])
 def weight():
     result = None
+    error = None
     value = ''
     from_unit = 'kg'
     to_unit = 'g'
@@ -104,16 +110,19 @@ def weight():
             if from_unit not in WEIGHT_UNITS or to_unit not in WEIGHT_UNITS:
                 raise ValueError
         except ValueError:
-            result = 'Please enter a valid number'
+            error = 'Please enter a valid number.'
         else:
-            converted = amount * WEIGHT_UNITS[from_unit] / WEIGHT_UNITS[to_unit]
-            result = f'{amount:.10g} {from_unit} = {converted:.10g} {to_unit}'
-
+            if amount < 0:
+                error = 'Please enter a non-negative number.'
+            else:
+                converted = amount * WEIGHT_UNITS[from_unit] / WEIGHT_UNITS[to_unit]
+                result = f'{amount:.10g} {from_unit} = {converted:.10g} {to_unit}'
 
     return render_template(
         'weight.html',
         unit_of='weight',
         result=result,
+        error=error,
         value=value,
         from_unit=from_unit,
         to_unit=to_unit,
@@ -123,6 +132,7 @@ def weight():
 @app.route('/temperature', methods=['GET', 'POST'])
 def temperature():
     result = None
+    error = None
     value = ''
     from_unit = 'c'
     to_unit = 'f'
@@ -141,7 +151,7 @@ def temperature():
             if from_unit not in TEMPERATURE_UNITS or to_unit not in TEMPERATURE_UNITS:
                 raise ValueError
         except ValueError:
-            result = 'Please enter a valid number.'
+            error = 'Please enter a valid number.'
         else:
             converted = from_celsius(to_celsius(amount, from_unit), to_unit)
             result = (
@@ -153,6 +163,7 @@ def temperature():
         'temperature.html',
         unit_of='temperature',
         result=result,
+        error=error,
         value=value,
         from_unit=from_unit,
         to_unit=to_unit,

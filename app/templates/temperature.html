@@ -1,42 +1,58 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form method="post">
-	<p>
-		<label for="value">Value</label><br>
-		<input
-			type="text"
-			id="value"
-			name="value"
-			inputmode="decimal"
-			pattern="-?[0-9]+(\.[0-9]+)?"
-			maxlength="20"
-			title="Enter a number, for example 12, 12.5, or -12.5"
-			value="{{ value }}"
-			required
-		>
-	</p>
+<div class="mx-auto w-100" style="max-width: 36rem;">
+	<form method="post" autocomplete="off" class="card border border-2 border-success-subtle shadow-sm">
+		<div class="card-body p-4">
+			<div class="mb-3">
+				<label class="form-label" for="value">Value</label>
+				<input
+					class="form-control"
+					type="text"
+					id="value"
+					name="value"
+					autocomplete="off"
+					inputmode="decimal"
+					pattern="-?[0-9]+(\.[0-9]+)?"
+					maxlength="20"
+					title="Enter a number, for example 12, 12.5, or -12.5"
+					value="{{ value }}"
+					required
+				>
+			</div>
 
-	<p>
-		<label for="from_unit">From</label>
-		<select id="from_unit" name="from_unit">
-			{% for unit, label in units.items() %}
-			<option value="{{ unit }}"{% if unit == from_unit %} selected{% endif %}>{{ label }}</option>
-			{% endfor %}
-		</select>
+			<div class="row g-3 mb-3">
+				<div class="col">
+					<label class="form-label" for="from_unit">From</label>
+					<select class="form-select" id="from_unit" name="from_unit">
+						{% for unit, label in units.items() %}
+						<option value="{{ unit }}"{% if unit == from_unit %} selected{% endif %}>{{ label }}</option>
+						{% endfor %}
+					</select>
+				</div>
 
-		<label for="to_unit">To</label>
-		<select id="to_unit" name="to_unit">
-			{% for unit, label in units.items() %}
-			<option value="{{ unit }}"{% if unit == to_unit %} selected{% endif %}>{{ label }}</option>
-			{% endfor %}
-		</select>
-	</p>
+				<div class="col">
+					<label class="form-label" for="to_unit">To</label>
+					<select class="form-select" id="to_unit" name="to_unit">
+						{% for unit, label in units.items() %}
+						<option value="{{ unit }}"{% if unit == to_unit %} selected{% endif %}>{{ label }}</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
 
-	<button type="submit">Convert</button>
-</form>
+			<button class="btn btn-success w-100" type="submit">Convert</button>
+		</div>
+	</form>
 
-{% if result %}
-<h2>{{ result }}</h2>
-{% endif %}
+	{% if error %}
+	<div class="alert alert-danger mt-3 text-center shadow-sm">
+		<h2 class="h4 mb-0">{{ error }}</h2>
+	</div>
+	{% elif result %}
+	<div class="alert alert-success mt-3 text-center shadow-sm">
+		<h2 class="h4 mb-0">{{ result }}</h2>
+	</div>
+	{% endif %}
+</div>
 {% endblock %}
