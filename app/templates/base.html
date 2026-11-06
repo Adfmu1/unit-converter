@@ -5,12 +5,13 @@
 	<title>Unit converter</title>
 </head>
 <body>
-	<h1>Unit coverter</h1>
+	<h1>Unit converter</h1>
 	{% if unit_of %}
 	    <h2>Unit of {{ unit_of }}</h2>
 	{% endif %}
 	<hr>
 	<a href="{{ url_for('length') }}">Length</a>
+	<a href="{{ url_for('weight') }}">Weight</a>
 	{# <a href="{{ url_for('weight') }}">Weight</a> #}
 	{# <a href="{{ url_for('temperature') }}">Temperature</a> #}
 	{% block content %}{% endblock %}
