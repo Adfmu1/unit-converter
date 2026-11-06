@@ -22,6 +22,26 @@ WEIGHT_UNITS = {
     'stone': 6.35029318,
 }
 
+TEMPERATURE_UNITS = {
+    'c': '°C',
+    'f': '°F',
+    'k': 'K',
+}
+
+def to_celsius(value, unit):
+    if unit == 'c':
+        return value
+    if unit == 'f':
+        return (value - 32) * 5 / 9
+    return value - 273.15
+
+def from_celsius(value, unit):
+    if unit == 'c':
+        return value
+    if unit == 'f':
+        return value * 9 / 5 + 32
+    return value + 273.15
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -98,4 +118,43 @@ def weight():
         from_unit=from_unit,
         to_unit=to_unit,
         units=WEIGHT_UNITS,
+    )
+
+@app.route('/temperature', methods=['GET', 'POST'])
+def temperature():
+    result = None
+    value = ''
+    from_unit = 'c'
+    to_unit = 'f'
+
+    if request.method == 'POST':
+        value = request.form.get('value', '').strip()
+        from_unit = request.form.get('from_unit', 'c')
+        to_unit = request.form.get('to_unit', 'f')
+
+        try:
+            if not value or len(value) > 20:
+                raise ValueError
+            amount = float(value)
+            if amount != amount or amount in (float('inf'), float('-inf')):
+                raise ValueError
+            if from_unit not in TEMPERATURE_UNITS or to_unit not in TEMPERATURE_UNITS:
+                raise ValueError
+        except ValueError:
+            result = 'Please enter a valid number.'
+        else:
+            converted = from_celsius(to_celsius(amount, from_unit), to_unit)
+            result = (
+                f'{amount:.10g} {TEMPERATURE_UNITS[from_unit]} = '
+                f'{converted:.10g} {TEMPERATURE_UNITS[to_unit]}'
+            )
+
+    return render_template(
+        'temperature.html',
+        unit_of='temperature',
+        result=result,
+        value=value,
+        from_unit=from_unit,
+        to_unit=to_unit,
+        units=TEMPERATURE_UNITS,
     )
